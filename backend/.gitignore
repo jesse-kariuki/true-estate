@@ -35,3 +35,4 @@ build/
 .env
 
 src/main/java/com.trustestate.backend/config/JwtConstant.java
+src/main/java/resources/application.properties
