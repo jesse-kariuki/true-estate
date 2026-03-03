@@ -1,0 +1,179 @@
+# True Estate Backend
+
+This repository contains the **True Estate** backend application, a Spring Boot service that provides user management and profile functionality for a real estate platform. The service is intended to be paired with a frontend (not included) and uses JWT for authentication.
+
+---
+
+## 🚀 Features
+
+- **User Management**
+  - Registration and login with JWT authentication
+  - Retrieve user profile and fetch user by ID
+- **Profile System**
+  - Onboard tenants and landlords with separate endpoints
+- **Security**
+  - Spring Security with JWT validation
+  - Password hashing and basic security configuration
+- **Persistence**
+  - JPA/Hibernate backed by MySQL
+- **Mail support** (configured via Spring Mail)
+
+> ⚠️ Other modules such as `property` and `verification` are present but currently contain minimal or no implementation.
+
+---
+
+## 🗂️ Project Structure
+
+```
+src/
+ ├─ main/
+ │   ├─ java/com/trustestate/backend/
+ │   │   ├─ common/           # shared utilities and enums
+ │   │   ├─ config/           # security and JWT classes
+ │   │   ├─ exception/        # custom exception handling
+ │   │   ├─ mapper/           # object mappers (DTOs ↔ entities)
+ │   │   ├─ profile/          # tenant/landlord profile logic
+ │   │   │   ├─ controller/
+ │   │   │   ├─ dto/
+ │   │   │   ├─ mapper/
+ │   │   │   ├─ models/
+ │   │   │   ├─ repository/
+ │   │   │   └─ service/
+ │   │   ├─ property/         # placeholder for property management
+ │   │   ├─ user_management/  # authentication and user APIs
+ │   │   │   ├─ auth/
+ │   │   │   ├─ controller/
+ │   │   │   ├─ domain/
+ │   │   │   ├─ dto/
+ │   │   │   ├─ models/
+ │   │   │   ├─ repository/
+ │   │   │   └─ service/
+ │   │   └─ verification/     # empty module for future use
+ │   └─ resources/
+ │       └─ application.properties
+ └─ test/                 # integration and unit tests
+```
+
+---
+
+## 📦 Dependencies
+
+Defined in `pom.xml`:
+
+- Spring Boot 4.0.3
+- Spring Web MVC, Security, Data JPA, Mail
+- JSON Web Token (jjwt 0.11.5)
+- MySQL Connector/J
+- Lombok (provided)
+- Jakarta Validation API
+
+---
+
+## ⚙️ Configuration
+
+Edit `src/main/resources/application.properties` or override via environment variables:
+
+```properties
+spring.application.name=backend
+server.port=8081
+
+# MySQL datasource
+tspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/true_estate?useSSL=false&serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=<your-password>
+
+# JWT settings
+jwt.secret=<your-secret>
+jwt.header=Authorization
+
+# Mail (Gmail example)
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=<email>
+spring.mail.password=<app-password>
+```
+
+> 🔒 **Security note:** Do **not** commit real credentials. Use a secrets manager or environment variables in production.
+
+---
+
+## 🛠️ Build & Run
+
+```bash
+# build the project
+./mvnw clean package
+
+# run the application
+./mvnw spring-boot:run
+```
+
+The server listens on port `8081` by default.
+
+---
+
+## 🧪 Testing
+
+Execute unit tests with Maven:
+
+```bash
+./mvnw test
+```
+
+A basic test exists in `BackendApplicationTests.java`.
+
+---
+
+## 🔌 REST API Endpoints
+
+### Authentication
+
+| Method | Path             | Description                     |
+|--------|------------------|---------------------------------|
+| POST   | `/api/auth/register` | Register a new user            |
+| POST   | `/api/auth/login`    | Login and receive JWT          |
+
+### User
+
+| Method | Path                      | Description                          |
+|--------|---------------------------|--------------------------------------|
+| GET    | `/api/user/profile`       | Get profile of current user (JWT required) |
+| GET    | `/api/user/{id}`          | Get user by ID (JWT required)        |
+
+### Profile
+
+| Method | Path                           | Description                            |
+|--------|--------------------------------|----------------------------------------|
+| POST   | `/api/profile/tenant/{systemUserId}`   | Create tenant profile              |
+| POST   | `/api/profile/landlord/{systemUserId}` | Create landlord profile            |
+
+> Other endpoints may be added as development continues.
+
+---
+
+## 📚 Development Notes
+
+- JWT utilities are located in `com.trustestate.backend.config`.
+- `UserService` handles token parsing and user retrieval.
+- Exception handling globally via `GlobalExceptionHandler`.
+- Profiles use separate DTOs and services; validation is performed via Jakarta Validation annotations.
+
+---
+
+## ✅ TODO & Roadmap
+
+- Implement `property` management (CRUD for real estate listings).
+- Add `verification` workflows (e.g., identity, documents).
+- Improve test coverage across modules.
+- Externalize configuration using Spring Cloud Config or similar.
+- Add Swagger/OpenAPI documentation.
+
+---
+
+## 📄 License
+
+Specify license information here, if applicable.
+
+---
+
+_*Generated by GitHub Copilot based on project scan._
